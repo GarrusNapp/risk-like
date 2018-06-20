@@ -6,15 +6,15 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+import json
 
 
 
 class Register(APIView):
     def post(self, request):
-        print(request.data["username"])
-
         if request.data:
             body = request.data
+            print(body)
             username = body['username']
             password = body['password']
 
@@ -32,8 +32,9 @@ class Register(APIView):
 
 class Login(APIView):
     def post(self, request):
-        username = request.data['username']
-        password = request.data['password']
+        body = json.loads(request.data)
+        username = body.data['username']
+        password = body.data['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)

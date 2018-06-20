@@ -1,18 +1,22 @@
 import React, { Component } from "react";
+import "./navpanel.css";
+
 
 class NavPanel extends Component {
   render() {
     return (
       <div className="navPanel">
+        <span className="navTitle">R I S K</span>
         {this.props.user ? (
           <React.Fragment>
+          <span className="userName" >{this.props.user}</span>
             <button>ProfilePage</button>
             <button>Logout</button>
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <button>Register</button>
-            <button>Login</button>
+            <button onClick={() => this.props.formTypeChange("register")}>Register</button>
+            <button onClick={() => this.props.formTypeChange("login")}>Login</button>
           </React.Fragment>
         )}
       </div>

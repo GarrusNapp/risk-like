@@ -1,0 +1,16 @@
+.navPanel {
+  background-color: grey;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navTitle {
+  font-size: 2rem;
+  margin-right: auto;
+}
+
+.userName {
+  margin-right: 10px;
+  color: white;
+  align-self: center;
+}

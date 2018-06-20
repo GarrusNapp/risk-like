@@ -4,11 +4,7 @@ class Footer extends Component {
   render() {
     return (
       <div className="footer">
-        {this.props.user ? (
-          <h1>Logged</h1>
-        ) : (
-          <h2>Not Logged</h2>
-        )}
+        <h4>Footer</h4>
       </div>
     );
   }
