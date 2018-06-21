@@ -1,5 +1,5 @@
-from .models import CustomUser
-from .serializers import UserSerializer, FullUserData
+from .models import CustomUser, Player, Game
+from .serializers import UserSerializer, FullUserData, GameSerializer
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
@@ -12,11 +12,11 @@ class Me(APIView):
     def get(self, request):
         if not request.user.is_authenticated:
             return Response({}, status=status.HTTP_403_FORBIDDEN)
-        if request.method == 'GET':
-            username = request.user.get_username()
-            entry = CustomUser.objects.filter(username=username).values()[0]
-            serializer = FullUserData(entry)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        username = request.user.get_username()
+        entry = CustomUser.objects.filter(username=username).values()[0]
+        serializer = FullUserData(entry)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class Register(APIView):
     def post(self, request):
@@ -65,4 +65,34 @@ class ShowPlayers(APIView):
         print(request.user.is_authenticated)
         users = CustomUser.objects.all()
         serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+
+
+class cGame(APIView):
+    def post(self, request):
+        game = Game(
+            name=request.data["name"],
+            creator=request.user,
+            players_count=1,
+            board="poland",
+        )
+        game.save()
+        player = Player(
+            game=game,
+            owner=True,
+            first=False,
+            user=request.user.id
+        )
+        player.save()
+
+        r = Game.objects.filter(pk=game.pk)
+        serializer = GameSerializer(r)
+
+        return Response(serializer.data)
+
+    def get(self, request):
+        r = Game.objects.filter(finished=False)
+        serializer = GameSerializer(r)
+
         return Response(serializer.data)

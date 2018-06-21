@@ -28,8 +28,9 @@ class GameView extends Component {
 
   render() {
     return (
-      <div className="GameView">
+      <div className="gameView">
         {this.state.paths ? <Svg data={this.state.paths} /> : null}
+        <div className="">Deploy</div>
       </div>
     );
   }

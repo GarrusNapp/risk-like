@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Game
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,3 +23,11 @@ class FullUserData(serializers.ModelSerializer):
             'surrendered'
         )
         model = CustomUser
+
+
+class GameSerializer(serializers.ModelSerializer):
+    creator = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Game
+        fields = ("id", "creator", "players_count", "started", "finished", "draw", "surrendered")
