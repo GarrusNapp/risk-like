@@ -30,7 +30,7 @@ class App extends Component {
   login = obj => {
     this.setState({
       user: obj.data.username,
-      view: "dashboard"
+      view: "game"
     });
     localStorage.setItem("user", obj.data.username);
   };

@@ -1,0 +1,39 @@
+.App {
+  text-align: center;
+}
+
+
+svg {
+  border: solid 2px green;
+  margin-top: 2px;
+
+}
+
+path {
+  fill: lightgreen;
+  fill-rule: evenodd;
+  stroke: white;
+  stroke-width: 0.5;
+}
+
+.focused {
+  stroke: white;
+  animation: pulse 2s infinite;
+  animation-direction: alternate;
+}
+
+
+.neighbour {
+  fill: lime;
+}
+
+
+@keyframes pulse {
+  from {
+    fill: green;
+  }
+  to {
+    fill: darkgreen;
+    stroke-width: 3;
+  }
+}
