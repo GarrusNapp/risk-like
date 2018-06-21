@@ -7,7 +7,8 @@ urlpatterns = [
     path('user/players', views.ShowPlayers.as_view()),
     path('user/register', views.Register.as_view()),
     path('user/login', views.Login.as_view()),
-    path('user/logout', views.Logout.as_view())
+    path('user/logout', views.Logout.as_view()),
+    path('user/me', views.Me.as_view())
 ]
 
 # url(r'register/', views.register),

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 class UserForm extends Component {
   constructor(props) {
@@ -6,7 +7,8 @@ class UserForm extends Component {
     this.state = {
       name: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
+      feedback: []
     };
   }
 
@@ -16,30 +18,65 @@ class UserForm extends Component {
     });
   };
 
+  validate = () => {
+    let feedback = [];
+    const mode = this.props.formType;
+    const { name, password, confirmPassword } = this.state;
+    if (mode === "register") {
+      if (password !== confirmPassword) {
+        feedback.push("Passwords don't match");
+      }
+      if (password.length < 8) {
+        feedback.push("Password needs to be at least 8 char long");
+      }
+      if (name.length < 4) {
+        feedback.push("Name needs to be at least 4 char long");
+      }
+    }
+    if (feedback.length !== 0) {
+      this.setState({
+        feedback
+      });
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   handleSubmit = e => {
     e.preventDefault();
-
+    this.setState({
+      feedback: []
+    });
+    if (!this.validate()) {
+      return;
+    }
+    const type = this.props.formType;
     const { name, password } = this.state;
     const data = { username: name, password };
-    console.log(data);
     const API_URL = "http://localhost:8000/api/user/";
-    fetch(API_URL + this.props.formType, {
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
+    axios({
+      method: "post",
+      url: API_URL + type,
+      withCredentials: true,
+      data
     })
       .then(r => {
-        if (r.ok) {
-          return r.json();
+        if (type === "login") {
+          this.props.login(r);
         } else {
-          console.log("error");
+          this.setState({
+            feedback: ["User created. Please login."]
+          });
         }
       })
-      .then(data => console.log(data));
+      .catch(e => {
+        if (e.response.data.error) {
+          this.setState({
+            feedback: [e.response.data.error]
+          });
+        }
+      });
   };
 
   render() {
@@ -98,6 +135,9 @@ class UserForm extends Component {
 
         {form}
         <button>Submit</button>
+        <ul id="formFeedback">
+          {this.state.feedback.map((el, i) => <li key={i}>{el}</li>)}
+        </ul>
       </form>
     );
   }

@@ -10,8 +10,9 @@ class NavPanel extends Component {
         {this.props.user ? (
           <React.Fragment>
           <span className="userName" >{this.props.user}</span>
-            <button>ProfilePage</button>
-            <button>Logout</button>
+            <button onClick={() => this.props.viewChange("dashboard")}>Dashboard</button>
+            <button onClick={() => this.props.viewChange("profile")}>ProfilePage</button>
+            <button onClick={this.props.logout}>Logout</button>
           </React.Fragment>
         ) : (
           <React.Fragment>

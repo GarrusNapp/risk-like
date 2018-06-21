@@ -126,10 +126,10 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
-    ]
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'risk.authentication.CsrfExemptSessionAuthentication',
-    # ),
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
 }
 
 

@@ -1,15 +1,23 @@
 import React, { Component } from "react";
 import UserForm from "../userform/userform";
-import "./main.css";
+import DashBoard from "../dashboard/dashboard";
+import UserProfile from "../userprofile/userprofile";
 
+import "./main.css";
 
 class Main extends Component {
   render() {
-    return (
-      <div className="main">
-        {this.props.user ? <h1>Logged</h1> : <UserForm formType={this.props.formType} />}
-      </div>
-    );
+    let view = "";
+    if (this.props.view === "form") {
+      view = (
+        <UserForm formType={this.props.formType} login={this.props.login} />
+      );
+    } else if (this.props.view === "dashboard") {
+      view = <DashBoard />;
+    } else if (this.props.view === "profile") {
+      view = <UserProfile />;
+    }
+    return <div className="main">{view}</div>;
   }
 }
 

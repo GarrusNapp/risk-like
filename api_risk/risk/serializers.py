@@ -6,7 +6,19 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'username',
+        )
+        model = CustomUser
+
+
+class FullUserData(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            'id',
+            'username',
             'won',
-            'lost'
+            'lost',
+            'draws',
+            'won_by_surrender',
+            'surrendered'
         )
         model = CustomUser
