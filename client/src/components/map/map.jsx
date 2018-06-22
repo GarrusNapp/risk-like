@@ -117,7 +117,7 @@ export class Svg extends Component {
     });
   };
 
-  clickHandler = e => {
+  clickHandler = (e, data) => {
     console.log(this.state.dragMovedBy);
     if (this.state.dragMovedBy > 2) {
       return;
@@ -125,6 +125,10 @@ export class Svg extends Component {
     this.setState({
       clicked: e.target.attributes.index.value,
       neighbours: e.target.attributes.neighbours.value.split(",").map(Number) //:)
+    });
+    this.props.getDataOfClickedElement({
+      clicked: this.state.clicked,
+      data: data
     });
   };
 
@@ -147,7 +151,9 @@ export class Svg extends Component {
         d={this.calculated[i]}
         data={d}
         className={this.showNeighbours(i)}
-        clickHandler={this.clickHandler}
+        clickHandler={e => {
+          this.clickHandler(e, d.properties);
+        }}
       />
     ));
 

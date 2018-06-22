@@ -12,9 +12,10 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
+
 class Game(models.Model):
     name = models.CharField(max_length=50)
-    creator = models.ForeignKey('CustomUser', blank=True, related_name='games', on_delete=models.CASCADE)
+    creator = models.ForeignKey('CustomUser', blank=True, related_name='games', on_delete=models.CASCADE, related_query_name='games')
     players_count = models.IntegerField(default=0)
     board = models.CharField(max_length=500)
     started = models.BooleanField(default=False)
@@ -32,8 +33,9 @@ class Player(models.Model):
     owner = models.BooleanField(default=False)
     first = models.BooleanField(default=False)
     user = models.IntegerField(default=0)
+    username = models.CharField(max_length=50, default="HYPNO")
 
     def __str__(self):
-        return "Player of " + str(self.game)
+        return self.username
 
 

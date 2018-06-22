@@ -30,7 +30,7 @@ class App extends Component {
   login = obj => {
     this.setState({
       user: obj.data.username,
-      view: "game"
+      view: "dashboard"
     });
     localStorage.setItem("user", obj.data.username);
   };
@@ -46,6 +46,13 @@ class App extends Component {
       formType: type
     });
   };
+
+  enterGame = gameId => {
+    this.setState({
+      view: "game",
+      gameId
+    })
+  }
 
   logout = () => {
     axios({
@@ -85,6 +92,8 @@ class App extends Component {
           view={this.state.view}
           formType={this.state.formType}
           login={this.login}
+          enterGame={this.enterGame}
+          gameId={this.state.gameId}
         />
         <Footer />
       </div>

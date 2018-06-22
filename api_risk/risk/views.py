@@ -68,7 +68,6 @@ class ShowPlayers(APIView):
         return Response(serializer.data)
 
 
-
 class cGame(APIView):
     def post(self, request):
         game = Game(
@@ -82,17 +81,61 @@ class cGame(APIView):
             game=game,
             owner=True,
             first=False,
-            user=request.user.id
+            user=request.user.id,
+            username=request.user.get_username()
         )
         player.save()
 
-        r = Game.objects.filter(pk=game.pk)
+        r = Game.objects.get(pk=game.pk)
+        print(r)
         serializer = GameSerializer(r)
 
         return Response(serializer.data)
 
     def get(self, request):
         r = Game.objects.filter(finished=False)
-        serializer = GameSerializer(r)
+        serializer = GameSerializer(r, many=True)
 
         return Response(serializer.data)
+
+
+class ShowGameInfo(APIView):
+    def get(self, request, game_id):
+        r = Game.objects.get(pk=game_id)
+        serializer = GameSerializer(r)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class Join(APIView):
+    def post(self, request, game_id):
+        game = Game.objects.get(pk=game_id)
+        if game.players_count == 2:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        game.players_count = 2
+        game.save()
+        player = Player(
+            game=game,
+            owner=False,
+            first=True,
+            user=request.user.id,
+            username=request.user.get_username()
+        )
+        player.save()
+
+        return Response({}, status=status.HTTP_200_OK)
+
+
+class Leave(APIView):
+    def post(self, request, game_id):
+        games = Game.objects.get(pk=game_id).players.all().values()
+        game = Game.objects.get(pk=game_id)
+        game.players_count = game.players_count - 1
+        game.save()
+        player_leaving = ""
+        for player in games:
+            if player["user"] == request.user.id:
+                player_leaving = player["id"]
+        player = Player.objects.get(pk=player_leaving)
+        print(player)
+        player.delete()
+        return Response({}, status=status.HTTP_200_OK)

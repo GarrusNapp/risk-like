@@ -26,8 +26,10 @@ class FullUserData(serializers.ModelSerializer):
 
 
 class GameSerializer(serializers.ModelSerializer):
-    creator = serializers.PrimaryKeyRelatedField(read_only=True)
+    creator = UserSerializer(read_only=True)
+    players = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Game
-        fields = ("id", "creator", "players_count", "started", "finished", "draw", "surrendered")
+        fields = ("id", "name", "creator", "players_count", "players", "started", "finished", "draw", "surrendered", "board")
+

@@ -9,8 +9,10 @@ urlpatterns = [
     path('user/login', views.Login.as_view()),
     path('user/logout', views.Logout.as_view()),
     path('user/me', views.Me.as_view()),
-
-    path('games', views.cGame.as_view())
+    path('games', views.cGame.as_view()),
+    path('game/<int:game_id>', views.ShowGameInfo.as_view()),
+    path('game/<int:game_id>/join', views.Join.as_view()),
+    path('game/<int:game_id>/leave', views.Leave.as_view()),
 ]
 
 # url(r'register/', views.register),

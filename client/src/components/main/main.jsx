@@ -14,11 +14,13 @@ class Main extends Component {
         <UserForm formType={this.props.formType} login={this.props.login} />
       );
     } else if (this.props.view === "dashboard") {
-      view = <DashBoard />;
+      view = (
+        <DashBoard user={this.props.user} enterGame={this.props.enterGame} />
+      );
     } else if (this.props.view === "profile") {
       view = <UserProfile />;
     } else if (this.props.view === "game") {
-      view = <GameView />;
+      view = <GameView gameId={this.props.gameId} />;
     }
     return <div className="main">{view}</div>;
   }
