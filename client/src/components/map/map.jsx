@@ -28,7 +28,12 @@ export class Svg extends Component {
       dragStartPosition: [0, 0],
       dragMovedBy: 0
     };
-    this.calculated = this.props.data.map((d, i) => this.calculate(d));
+    this.calculated = this.props.data.map((d, i) => {
+      let x = this.calculate(d);
+      console.log(d);
+      console.log(this.calculate(geoPath().centroid(d)));
+      return x;
+    });
   }
 
   calculate(path) {
@@ -122,14 +127,18 @@ export class Svg extends Component {
     if (this.state.dragMovedBy > 2) {
       return;
     }
-    this.setState({
-      clicked: e.target.attributes.index.value,
-      neighbours: e.target.attributes.neighbours.value.split(",").map(Number) //:)
-    });
-    this.props.getDataOfClickedElement({
-      clicked: this.state.clicked,
-      data: data
-    });
+    this.setState(
+      {
+        clicked: e.target.attributes.index.value,
+        neighbours: e.target.attributes.neighbours.value.split(",").map(Number) //:)
+      },
+      () => {
+        this.props.getDataOfClickedElement({
+          clicked: this.state.clicked,
+          data: data
+        });
+      }
+    );
   };
 
   clear = e => {
