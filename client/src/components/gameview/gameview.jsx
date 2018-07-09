@@ -15,18 +15,18 @@ class GameView extends Component {
       currentRegion: ""
     };
   }
-  getDataOfClickedElement = (obj) => {
+  getDataOfClickedElement = obj => {
     this.setState({
       currentRegion: obj
-    })
-  }
+    });
+  };
   componentDidMount() {
     fetch("poland.json")
       .then(response => {
         return response.json();
       })
       .then(geodata => {
-        console.log(geodata)
+        console.log(geodata);
         const svgPaths = feature(geodata, geodata.objects.subregions).features;
         this.setState({
           paths: svgPaths,
@@ -44,6 +44,7 @@ class GameView extends Component {
       }
     })
       .then(r => {
+        r.data.board = JSON.parse(r.data.board.replace(/'/g, '"')); //not very elegant
         this.setState({
           gameInfo: r.data
         });
@@ -55,25 +56,29 @@ class GameView extends Component {
 
   render() {
     const { name, players } = this.state.gameInfo;
-    return (
+
+    return this.state.gameInfo ? (
       <div className="gameView">
-        {this.state.paths ? <Svg getDataOfClickedElement={this.getDataOfClickedElement} data={this.state.paths} /> : null}
+        {this.state.paths ? (
+          <Svg
+            getDataOfClickedElement={this.getDataOfClickedElement}
+            data={this.state.paths}
+            gameInfo={this.state.gameInfo}
+          />
+        ) : null}
         <div className="Game data">
-          {this.state.gameInfo ? (
-            <React.Fragment>
-              <h2>{name}</h2>
-              <p>Players: {players.join(", ")}</p>
-            </React.Fragment>
-          ) : (
-            "Loading"
-          )}
+          <React.Fragment>
+            <h2>{name}</h2>
+            <p>Players: {players.join(", ")}</p>
+          </React.Fragment>
 
           <div className="">
             <h4>{JSON.stringify(this.state.currentRegion)}</h4>
-          Deploy</div>
+            Deploy
+          </div>
         </div>
       </div>
-    );
+    ) : null;
   }
 }
 
