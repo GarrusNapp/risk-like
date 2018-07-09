@@ -1,12 +1,13 @@
 from .models import CustomUser, Player, Game
 from .serializers import UserSerializer, FullUserData, GameSerializer
 from django.contrib.auth import login, authenticate, logout
+import json
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
+from .board import INITIAL_BOARD
 
 class Me(APIView):
     def get(self, request):
@@ -73,8 +74,9 @@ class cGame(APIView):
         game = Game(
             name=request.data["name"],
             creator=request.user,
+            board=json.dumps(INITIAL_BOARD),
             players_count=1,
-            board="poland",
+
         )
         game.save()
         player = Player(

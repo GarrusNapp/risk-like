@@ -17,7 +17,7 @@ class Game(models.Model):
     name = models.CharField(max_length=50)
     creator = models.ForeignKey('CustomUser', blank=True, related_name='games', on_delete=models.CASCADE, related_query_name='games')
     players_count = models.IntegerField(default=0)
-    board = models.CharField(max_length=500)
+    board = models.CharField(max_length=5000)
     started = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
     surrendered = models.BooleanField(default=False)
@@ -38,4 +38,6 @@ class Player(models.Model):
     def __str__(self):
         return self.username
 
-
+# class Board(models.Model):
+#     game = models.ForeignKey('Game', related_name='board', on_delete=models.CASCADE)
+#
