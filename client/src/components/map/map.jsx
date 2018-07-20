@@ -37,28 +37,28 @@ export class Svg extends Component {
       dragStartPosition: [0, 0],
       dragMovedBy: 0
     };
-    this.calculated = this.props.data.map((d, i) => {
-      let centroid = geoPath().centroid(d);
-      let x = this.calculate(d, centroid);
-      return x;
-    });
+    // this.calculated = this.props.data.map((d, i) => {
+    //   let centroid = geoPath().centroid(d);
+    //   let x = this.calculate(d, centroid);
+    //   return x;
+    // });
   }
 
-  calculate(path, centroid) {
-    //this function will calcualte LONG/LAT paths & their centroids into svg ready representation
-    const width = 800;
-    const height = 600;
-    const scale = 3400;
-    const offset = [width / 2, height / 2];
-    const projection = geoMercator()
-      .scale(scale)
-      .center([19.2, 52.15])
-      .precision(0)
-      .translate(offset);
-    const calculatedCentroid = projection(centroid);
-    const generator = geoPath().projection(projection);
-    return { path: generator(path), centroid: calculatedCentroid };
-  }
+  // calculate(path, centroid) {
+  //   //this function will calcualte LONG/LAT paths & their centroids into svg ready representation
+  //   const width = 800;
+  //   const height = 600;
+  //   const scale = 3400;
+  //   const offset = [width / 2, height / 2];
+  //   const projection = geoMercator()
+  //     .scale(scale)
+  //     .center([19.2, 52.15])
+  //     .precision(0)
+  //     .translate(offset);
+  //   const calculatedCentroid = projection(centroid);
+  //   const generator = geoPath().projection(projection);
+  //   return { path: generator(path), centroid: calculatedCentroid };
+  // }
 
   showNeighbours = i => {
     if (this.state.clicked == i) {
@@ -133,7 +133,6 @@ export class Svg extends Component {
   };
 
   clickHandler = (e, data) => {
-    console.log(this.state.dragMovedBy);
     if (this.state.dragMovedBy > 2) {
       return;
     }
@@ -165,14 +164,14 @@ export class Svg extends Component {
 
     const areas = this.props.data.map((d, i) => (
       <Path
-        key={d.properties.NTS}
+        key={d.NTS}
         info={this.props.gameInfo.board[i]}
         index={i}
-        d={this.calculated[i].path}
-        centroid={this.calculated[i].centroid}
+        d={d.path}
+        centroid={d.centroid}
         className={this.showNeighbours(i)}
         clickHandler={e => {
-          this.clickHandler(e, d.properties);
+          this.clickHandler(e, {NAZ: d.NAZ, neighbours: d.neighbours});
         }}
       />
     ));

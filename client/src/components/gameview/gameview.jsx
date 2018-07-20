@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./gameview.css";
-import { feature } from "topojson-client";
 import { Svg } from "../map/map";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -9,30 +8,29 @@ class GameView extends Component {
   constructor() {
     super();
     this.state = {
-      paths: "",
       json: "",
       gameInfo: "",
       currentRegion: ""
     };
   }
+
   getDataOfClickedElement = obj => {
     this.setState({
       currentRegion: obj
     });
   };
+
   componentDidMount() {
-    fetch("poland.json")
+    fetch("map.json")
       .then(response => {
         return response.json();
       })
-      .then(geodata => {
-        console.log(geodata);
-        const svgPaths = feature(geodata, geodata.objects.subregions).features;
+      .then(data => {
         this.setState({
-          paths: svgPaths,
-          json: geodata
+          json: data
         });
       });
+
     axios({
       method: "get",
       url: "http://localhost:8000/api/game/" + this.props.gameId,
@@ -59,10 +57,10 @@ class GameView extends Component {
 
     return this.state.gameInfo ? (
       <div className="gameView">
-        {this.state.paths ? (
+        {this.state.json ? (
           <Svg
             getDataOfClickedElement={this.getDataOfClickedElement}
-            data={this.state.paths}
+            data={this.state.json}
             gameInfo={this.state.gameInfo}
           />
         ) : null}
