@@ -1,6 +1,6 @@
 import React, { Component, PureComponent } from "react";
 import "./map.css";
-import { geoMercator, geoPath } from "d3-geo";
+//import { geoMercator, geoPath } from "d3-geo";
 
 class Path extends PureComponent {
   render() {
@@ -13,14 +13,14 @@ class Path extends PureComponent {
           onClick={this.props.clickHandler}
           neighbours={this.props.info.neighbours}
         />
-        <circle
+        <text
           index={this.props.index}
           neighbours={this.props.info.neighbours}
           onClick={this.props.clickHandler}
-          cx={this.props.centroid[0]}
-          cy={this.props.centroid[1]}
-          r={2}
-        />
+          x={this.props.centroid[0]}
+          y={this.props.centroid[1]}
+          style={{fontSize: "10px"}}
+        >999</text>
       </React.Fragment>
     );
   }
@@ -132,14 +132,14 @@ export class Svg extends Component {
     });
   };
 
-  clickHandler = (e, data) => {
+  clickHandler = data => {
     if (this.state.dragMovedBy > 2) {
       return;
     }
     this.setState(
       {
-        clicked: e.target.attributes.index.value,
-        neighbours: e.target.attributes.neighbours.value.split(",").map(Number) //:)
+        clicked: data.index,
+        neighbours: data.neighbours
       },
       () => {
         this.props.getDataOfClickedElement({
@@ -170,8 +170,8 @@ export class Svg extends Component {
         d={d.path}
         centroid={d.centroid}
         className={this.showNeighbours(i)}
-        clickHandler={e => {
-          this.clickHandler(e, {NAZ: d.NAZ, neighbours: d.neighbours});
+        clickHandler={() => {
+          this.clickHandler({index: i, NAZ: d.NAZ, neighbours: d.neighbours});
         }}
       />
     ));
